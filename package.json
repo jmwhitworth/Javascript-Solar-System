@@ -1,0 +1,16 @@
+{
+  "name": "javascript-solar-system",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host --port 3006",
+    "build": "vite build",
+    "preview": "vite build && vite preview --host --port 3006"
+  },
+  "dependencies": {
+    "pixi.js": "^7.2.4"
+  },
+  "devDependencies": {
+    "vite": "^4.4.0"
+  }
+}
