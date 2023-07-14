@@ -1,59 +1,65 @@
-import * as PIXI from 'pixi.js';
+import {Application} from 'pixi.js';
+import debug from './helpers';
+import CameraGroup from './CameraGroup';
+import Star from './Star';
 
-const app = new PIXI.Application({
-    background: '#1099bb',
+// Create main PIXI.js app
+const app = new Application({
+    background: '#111',
     resizeTo: window,
+    antialias: true,
 });
-
 document.body.appendChild(app.view);
 
-// create a new Sprite from an image path
-const bunny = PIXI.Sprite.from('/bunny.png');
+// Create camera group to contain moveable sprites
+const camera = new CameraGroup();
+app.stage.addChild(camera);
 
-// Set's the anchor of the sprite to be its center, so it rotates around the middle
-bunny.anchor.set(0.5);
 
-// move the sprite to the center of the screen
-bunny.position.set(app.screen.width / 2, app.screen.height / 2)
+// Testing mouse events on full window
+app.renderer.view.addEventListener('mousedown', function(event) {
+    debug("Start", elapsed);
+    debug("Mousebutton", event.button);
+});
+app.renderer.view.addEventListener('mouseup', function(event) {
+    debug("End", elapsed);
+    debug("Mousebutton", event.button);
+});
+app.renderer.view.addEventListener('touchstart', function(event) {
+    debug("Start", elapsed);
+    debug("Mousebutton", event.button);
+});
+app.renderer.view.addEventListener('touchend', function(event) {
+    debug("End", elapsed);
+    debug("Mousebutton", event.button);
+});
 
-// Allows the Sprite to interact with events: https://pixijs.download/release/docs/PIXI.Sprite.html#eventMode
-bunny.eventMode = 'static';
 
-// Adds the Sprite to the page
-app.stage.addChild(bunny);
-
-// Handling dragging and dropping
-bunny.on('pointerdown', onDragStart)
-    .on('pointerup', onDragEnd)
-    .on('pointerupoutside', onDragEnd)
-    .on('globalpointermove', onDragMove);
-
-function onDragStart(event) {
-    // Store the initial position of the bunny and set dragging flag
-    this.data = event.data;
-    this.alpha = 0.5;
-    this.dragging = true;
-}
-
-function onDragEnd() {
-    // Reset the bunny's properties after dragging ends
-    this.alpha = 1;
-    this.dragging = false;
-    this.data = null;
-}
-
-function onDragMove() {
-    if (this.dragging) {
-        const newPosition = this.data.getLocalPosition(this.parent);
-        this.position.set(newPosition.x, newPosition.y);
+// Testing moving the new camera group
+camera.onglobalpointermove = (event) => {
+    debug("pointer", event);
+    if (camera.moveit) {
+        const x = event.data.getLocalPosition(app.stage).x;
+        const y = event.data.getLocalPosition(app.stage).y;
+        camera.position.set(x, y);
     }
 }
 
-// Listen for animate update
+
+// Instantiate stars
+const sun = new Star("#e99000", app.screen.width/10, app.screen.height/2, 40);
+camera.addChild(sun);
+
+const notTheSun = new Star("#e6e6e6", 60, 200, 20);
+camera.addChild(notTheSun);
+
+
+// Main rendering loop
+let elapsed = 0;
 app.ticker.add((delta) =>
 {
-    // just for fun, let's rotate mr rabbit a little
-    // delta is 1 if running at 100% performance
-    // creates frame-independent transformation
-    bunny.rotation += 0.05 * delta;
+    elapsed++;
+    sun.position.x += 0.1;
+    debug("Frame", elapsed);
+    debug("Camera Pos", camera.position.x +", "+ camera.position.y);
 });
