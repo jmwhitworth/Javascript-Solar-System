@@ -1,4 +1,5 @@
-const helpers = require('../solarsystem/helpers');
+//const helpers = require('../solarsystem/helpers');
+import {debug, validString} from '../models/helpers';
 
 const invalidStrings = [
     [1],
@@ -18,18 +19,18 @@ beforeAll(() => {
 
 //debug()
 test('Debug runs with valid params', () => {
-    expect(helpers.debug("Test ID", "Test content")).toBeTruthy();
+    expect(debug("Test ID", "Test content")).toBeTruthy();
 });
 test.each(invalidStrings)('Debug handles invalid params', (invalidStrings) => {
     const validInput = "Valid string";
-    expect(helpers.debug(validInput, invalidStrings)).toBeFalsy();
-    expect(helpers.debug(invalidStrings, validInput)).toBeFalsy();
+    expect(debug(validInput, invalidStrings)).toBeFalsy();
+    expect(debug(invalidStrings, validInput)).toBeFalsy();
 });
 
 //validString()
 test('validString works with valid strings', () => {
-    expect(helpers.validString("Valid string")).toBeTruthy();
+    expect(validString("Valid string")).toBeTruthy();
 });
 test.each(invalidStrings)('validString handles invalid strings or non-string inputs', (invalidStrings) => {
-    expect(helpers.validString(invalidStrings)).toBeFalsy();
+    expect(validString(invalidStrings)).toBeFalsy();
 });

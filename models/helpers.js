@@ -5,7 +5,7 @@
  * @param {string} content The content to set within the HTML div
  * @returns {boolean} If the function ran as expected
  */
-function debug(id, content = "")
+export function debug(id, content = "")
 {
     if (!document.getElementById('debug') || !validString(id) || !validString(content)) {
         return false;
@@ -29,12 +29,10 @@ function debug(id, content = "")
  * @param {*} stringVariable The variabel to test
  * @returns {boolean} If the given variable is a valid string
  */
-function validString(stringVariable)
+export function validString(stringVariable)
 {
     if (typeof stringVariable === 'string' && stringVariable.trim().length > 0) {
       return true;
     }
     return false;
 }
-
-module.exports = {debug, validString};
