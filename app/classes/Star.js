@@ -7,5 +7,4 @@ export default class Star extends Graphics {
         this.drawCircle(x, y, radius);
         this.endFill();
     }
-
 }
