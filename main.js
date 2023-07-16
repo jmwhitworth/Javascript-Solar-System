@@ -1,7 +1,7 @@
 import {Application} from 'pixi.js';
-import {debug} from './models/helpers.js';
-import CameraGroup from './models/CameraGroup.js';
-import Star from './models/Star.js';
+import {debug} from './app/helpers.js';
+import CameraGroup from './app/classes/CameraGroup.js';
+import Star from './app/classes/Star.js';
 
 
 // Create main PIXI.js app
@@ -12,39 +12,10 @@ const app = new Application({
 });
 document.body.appendChild(app.view);
 
+
 // Create camera group to contain moveable sprites
-const camera = new CameraGroup();
+const camera = new CameraGroup(true, 1, 0.25);
 app.stage.addChild(camera);
-
-
-// Testing mouse events on full window
-app.renderer.view.addEventListener('mousedown', function(event) {
-    debug("Start", elapsed);
-    debug("Mousebutton", event.button);
-});
-app.renderer.view.addEventListener('mouseup', function(event) {
-    debug("End", elapsed);
-    debug("Mousebutton", event.button);
-});
-app.renderer.view.addEventListener('touchstart', function(event) {
-    debug("Start", elapsed);
-    debug("Mousebutton", event.button);
-});
-app.renderer.view.addEventListener('touchend', function(event) {
-    debug("End", elapsed);
-    debug("Mousebutton", event.button);
-});
-
-
-// Testing moving the new camera group
-camera.onglobalpointermove = (event) => {
-    debug("pointer", event);
-    if (camera.moveit) {
-        const x = event.data.getLocalPosition(app.stage).x;
-        const y = event.data.getLocalPosition(app.stage).y;
-        camera.position.set(x, y);
-    }
-}
 
 
 // Instantiate stars
@@ -60,7 +31,7 @@ let elapsed = 0;
 app.ticker.add((delta) =>
 {
     elapsed++;
-    sun.position.x += 0.1;
-    debug("Frame", elapsed);
-    debug("Camera Pos", camera.position.x +", "+ camera.position.y);
+    debug("Frame", String(elapsed));
+
+    camera.update();
 });

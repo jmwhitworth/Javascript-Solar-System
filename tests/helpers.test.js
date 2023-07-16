@@ -1,5 +1,4 @@
-//const helpers = require('../solarsystem/helpers');
-import {debug, validString} from '../models/helpers';
+import {debug, validString} from '../app/helpers';
 
 const invalidStrings = [
     [1],
