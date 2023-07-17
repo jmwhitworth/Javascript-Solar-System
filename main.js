@@ -14,12 +14,13 @@ document.body.appendChild(app.view);
 
 
 // Create camera group to contain moveable sprites
-const camera = new CameraGroup(true, 1, 0.25);
+const camera = new CameraGroup(true, 1, 0.1);
 app.stage.addChild(camera);
+camera.initialiseMovement(app.renderer.view, 1, 0.5);
 
 
 // Instantiate stars
-const sun = new Star("#e99000", app.screen.width/10, app.screen.height/2, 40);
+const sun = new Star("#e99000", 0, 0, 40);
 camera.addChild(sun);
 
 const notTheSun = new Star("#e6e6e6", 60, 200, 20);
