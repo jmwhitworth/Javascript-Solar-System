@@ -16,7 +16,7 @@ beforeAll(() => {
     document.body.appendChild(debugDiv);
 });
 
-//debug()
+// debug()
 test('Debug runs with valid params', () => {
     expect(debug("Test ID", "Test content")).toBeTruthy();
 });
@@ -26,7 +26,7 @@ test.each(invalidStrings)('Debug handles invalid params', (invalidStrings) => {
     expect(debug(invalidStrings, validInput)).toBeFalsy();
 });
 
-//validString()
+// validString()
 test('validString works with valid strings', () => {
     expect(validString("Valid string")).toBeTruthy();
 });

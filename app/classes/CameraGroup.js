@@ -11,6 +11,7 @@ export default class CameraGroup extends Container {
     moveable        = false;
     scaleMovement   = 1;
     scaleZoom       = 1;
+    _debug          = false;
 
     // Error messages
     _noEventHandler = "No event handler set for Camera Group";
@@ -30,34 +31,36 @@ export default class CameraGroup extends Container {
             if (event.button === 1) {
                 event.preventDefault();
                 this.moving = true;
-                this.mousePos = {x:event.clientX, y:event.clientY};
+                this._setMousePosition(event.clientX, event.clientY);
             }
         });
         eventHandler.addEventListener("mouseup", (event) => {
             if (event.button === 1) {
                 event.preventDefault();
                 this.moving = false;
-                this.mousePos = {x:0, y:0};
+                this._setMousePosition();
             }
         });
 
         // Moves the camera group based on the mouse movement
         eventHandler.addEventListener("mousemove", (event) => {
             if (this.moving) {
-                const newPos = {x:event.clientX, y:event.clientY};
+                const currentMousePosition = {x:event.clientX, y:event.clientY};
+                const previousMousePosition = this._getMousePosition();
                 const delta = {
-                    x: (this.mousePos.x - newPos.x) * this.scaleMovement,
-                    y: (this.mousePos.y - newPos.y) * this.scaleMovement
+                    x: (previousMousePosition.x - currentMousePosition.x) * this.scaleMovement,
+                    y: (previousMousePosition.y - currentMousePosition.y) * this.scaleMovement
                 };
                 
                 this.position.x -= delta.x;
                 this.position.y -= delta.y;
-
-                this.mousePos = newPos;
+                this._setMousePosition(currentMousePosition.x, currentMousePosition.y);
             }
 
-            debug("Mouse position", String(event.clientX)+", "+String(event.clientY));
-            debug("Mouse rel position", String(this.position.x - event.clientX)+", "+String(this.position.y - event.clientY));
+            if (this._debug) {
+                debug("Mouse position", String(event.clientX)+", "+String(event.clientY));
+                debug("Mouse rel position", String(this.position.x - event.clientX)+", "+String(this.position.y - event.clientY));
+            }
         });
 
         // Scale the camera group based on scroll wheels
@@ -74,23 +77,37 @@ export default class CameraGroup extends Container {
 
     
     /**
-     * Helper function to reset the stored mouse position. Used to calculate mouse delta.
-     */
-    _mousePositionReset() {
-        this._mousePositionSet(0, 0);
-    }
-
-
-    /**
      * Sets the mouse position 
      * @param {Number} x 
      * @param {Number} y 
      */
-    _mousePositionSet(x, y) {
-        this.mousePos = {
+    _setMousePosition(x=0, y=0) {
+        if (typeof x !== 'number' || typeof y !== 'number') {
+            throw TypeError('X and Y must both be Numbers');
+        }
+
+        this._savedMousePosition = {
             x: x,
             y: y
         };
+    }
+
+
+    /**
+     * Gets the previously saved mouse position.
+     * @returns {Object} Containing x & y values
+     */
+    _getMousePosition() {
+        return this._savedMousePosition;
+    }
+
+
+    /**
+     * Enable/Disable debugging mode. Enables screen output of key variables
+     * @param {Boolean} set Assigned to debug mode variable
+     */
+    debug(set=false) {
+        this._debug = set;
     }
 
 
@@ -99,7 +116,7 @@ export default class CameraGroup extends Container {
      * @param {Number} scaleMovement : A multiplier to add to movement
      * @param {Number} scaleZoom : A multiplier to add to scaling
      */
-    initialiseMovement(eventHandler, scaleMovement=1, scaleZoom=1) {
+    enableMovement(eventHandler, scaleMovement=1, scaleZoom=1) {
         if (eventHandler === undefined) {
             throw TypeError(this._noEventHandler);
         }
@@ -107,22 +124,22 @@ export default class CameraGroup extends Container {
         this.moveable = true;
         this.scaleMovement = scaleMovement;
         this.scaleZoom = scaleZoom;
+        this._setMousePosition();
         this._setEventListeners(eventHandler);
     }
-    initializeMovement = this.initialiseMovement;
 
 
     /**
      * Main update method to be called as a part of the main event loop.
      */
     update() {
-        // Placeholder code to verify being called
-        if (this.moving) {
-            debug("CameraPosition", "Moving");
-        } else {
-            debug("CameraPosition", "Not Moving");
+        if (this._debug) {
+            if (this.moving) {
+                debug("CameraPosition", "Moving");
+            } else {
+                debug("CameraPosition", "Not Moving");
+            }
+            debug("Camera pos", String(this.position.x)+", "+String(this.position.y));
         }
-
-        debug("Camera pos", String(this.position.x)+", "+String(this.position.y));
     }
 }
