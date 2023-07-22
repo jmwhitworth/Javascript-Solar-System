@@ -17,6 +17,7 @@ document.body.appendChild(app.view);
 const camera = new CameraGroup(true, 1, 0.1);
 app.stage.addChild(camera);
 camera.enableMovement(app.renderer.view, 1, 0.5);
+camera.setCenterOfScaling(app.screen.width/2, app.screen.height/2);
 camera.debug(true);
 
 
