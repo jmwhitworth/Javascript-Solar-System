@@ -15,6 +15,7 @@ export default class CameraGroup extends Container {
 
     // Error messages
     _noEventHandler = "No event handler set for Camera Group";
+    _xAndYArentNumbers = "X and Y must both be Numbers";
 
 
     /**
@@ -83,7 +84,7 @@ export default class CameraGroup extends Container {
      */
     _setMousePosition(x=0, y=0) {
         if (typeof x !== 'number' || typeof y !== 'number') {
-            throw TypeError('X and Y must both be Numbers');
+            throw TypeError(this._xAndYArentNumbers);
         }
 
         this._savedMousePosition = {
@@ -126,6 +127,21 @@ export default class CameraGroup extends Container {
         this.scaleZoom = scaleZoom;
         this._setMousePosition();
         this._setEventListeners(eventHandler);
+    }
+
+
+    /**
+     * Sets the center of scaling, so that 'zooming' focuses on the given point
+     * @param {Number} x 
+     * @param {Number} y 
+     */
+    setCenterOfScaling(x=0, y=0) {
+        if (typeof x !== 'number' || typeof y !== 'number') {
+            throw TypeError(this._xAndYArentNumbers);
+        }
+
+        this.pivot.set(x, y);
+        this.position.set(x, y);
     }
 
 

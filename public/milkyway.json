@@ -1,0 +1,29 @@
+{
+    "Stars": [
+        {
+            "Name": "Sun",
+            "Width": 240,
+            "Colour": "#e99000",
+            "Position": {
+                "x": 0,
+                "y": 0
+            },
+            "Children": [
+                {
+                    "Name": "Mercury",
+                    "Width": 200,
+                    "Colour": "#ffffff",
+                    "Distance": 600,
+                    "Children": [
+                        {
+                            "Name": "Moon one",
+                            "Width": 50,
+                            "Colour": "#f4f4f4",
+                            "Distance": 80
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
