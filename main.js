@@ -1,6 +1,7 @@
-import {Application} from 'pixi.js';
-import {debug} from './app/helpers.js';
-import CameraGroup from './app/classes/CameraGroup.js';
+import { Application } from 'pixi.js';
+import { Viewport } from 'pixi-viewport';
+
+import { debug } from './app/helpers.js';
 import Star from './app/classes/Star.js';
 
 
@@ -13,20 +14,29 @@ const app = new Application({
 document.body.appendChild(app.view);
 
 
-// Create camera group to contain moveable sprites
-const camera = new CameraGroup(true, 1, 0.1);
-app.stage.addChild(camera);
-camera.enableMovement(app.renderer.view, 1, 0.5);
-camera.setCenterOfScaling(app.screen.width/2, app.screen.height/2);
-camera.debug(true);
+// Setup viewport / camera
+const viewport = new Viewport({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: 1000,
+    worldHeight: 1000,
+
+    events: app.renderer.events // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+})
+app.stage.addChild(viewport)
+viewport
+    .drag()
+    .pinch()
+    .wheel()
+    .decelerate()
 
 
 // Instantiate stars
 const sun = new Star("#e99000", 0, 0, 40);
-camera.addChild(sun);
+viewport.addChild(sun);
 
 const notTheSun = new Star("#e6e6e6", 60, 200, 20);
-camera.addChild(notTheSun);
+viewport.addChild(notTheSun);
 
 
 // Main rendering loop
@@ -35,6 +45,4 @@ app.ticker.add((delta) =>
 {
     elapsed++;
     debug("Frame", String(elapsed));
-
-    camera.update();
 });

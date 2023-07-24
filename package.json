@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "pixi-viewport": "^5.0.1",
     "pixi.js": "^7.2.4"
   },
   "devDependencies": {
