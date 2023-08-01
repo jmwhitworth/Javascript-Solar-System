@@ -1,7 +1,7 @@
 import { Application } from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 
-import { debug } from './app/helpers.js';
+import { debug, loadJSONData } from './app/helpers.js';
 import Star from './app/classes/Star.js';
 
 
@@ -30,14 +30,31 @@ viewport
     .wheel()
     .decelerate()
 
+const allStellarBodies = [];
 
-// Instantiate stars
-const sun = new Star("#e99000", 0, 0, 40);
-viewport.addChild(sun);
 
-const notTheSun = new Star("#e6e6e6", 60, 200, 20);
-viewport.addChild(notTheSun);
+const data = await loadJSONData('/milkyway.json');
 
+const stars = data['Stars'];
+for (let i = 0; i < stars.length; i++) {
+    
+    let star = stars[i];
+    let newStar = new Star(star['Name'], star['Colour'], star['Radius'], star['Position']['x'], star['Position']['y']);
+    viewport.addChild(newStar);
+    allStellarBodies.push(newStar);
+
+    let planets = star['Children'];
+
+    for (let n = 0; n < planets.length; n++) {
+        let planet = planets[n];
+        let moons = planet['Children'];
+
+        for (let x = 0; x < moons.length; x++) {
+            let moon = moons[x];
+            allStellarBodies.push(moon);
+        }
+    }
+}
 
 // Main rendering loop
 let elapsed = 0;
