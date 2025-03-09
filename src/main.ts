@@ -1,6 +1,6 @@
 import { Application } from "pixi.js";
 import { Viewport } from "pixi-viewport";
-import { StellarObject } from "./classes/StellarObject";
+import { SolarSystem } from "./classes/SolarSystem";
 import { debug } from "./helpers";
 
 (async () => {
@@ -20,12 +20,11 @@ import { debug } from "./helpers";
   viewport.drag().pinch().wheel().decelerate();
 
   // Create Sun Graphic
-  let stellar_objects = [];
-  stellar_objects.push(new StellarObject('#fce570', 200, 0, 0));
-  stellar_objects.push(new StellarObject('#1e90ff', 50, 300, 0));
-  stellar_objects.push(new StellarObject('#d3d3d3', 10, 350, 0));
-  
-  stellar_objects.forEach((object) => {
+  const milky_way = new SolarSystem("Milky Way");
+
+  milky_way.generate_objects();
+
+  milky_way.objects.forEach((object) => {
     viewport.addChild(object);
   });
 
@@ -34,7 +33,7 @@ import { debug } from "./helpers";
   {
       elapsed++;
 
-      //sun.tick();
+      milky_way.tick();
 
       debug("Frame", String(elapsed));
       debug("Delta", String(time.deltaMS));
