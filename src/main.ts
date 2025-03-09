@@ -20,7 +20,7 @@ import { debug, loadJSONData } from "./helpers";
   app.stage.addChild(viewport);
   viewport.drag().pinch().wheel().decelerate();
 
-  let bodies = await loadJSONData('/bodies.json');
+  const bodies = await loadJSONData('/bodies.json');
   const milky_way = new SolarSystem(bodies['milkyway']);
   milky_way.objects.forEach((object) => {
     viewport.addChild(object);

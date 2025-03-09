@@ -47,8 +47,10 @@ export async function loadJSONData(url:string) {
             throw new Error('Network response was not ok');
         }
         return await response.json();
-    } catch (error: any) {
-        console.error('Error loading JSON data:', error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Error loading JSON data:', error.message);
+        }
         return null;
     }
 }
