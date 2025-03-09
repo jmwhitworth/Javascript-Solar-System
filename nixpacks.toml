@@ -2,10 +2,10 @@
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ["npm install"]
+cmds = ["npm install --omit=dev"]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [start]
-cmd = "npx vite preview --port=${PORT:-3000}"
+cmd = "npx vite preview --host --port=${PORT:-3000}"
