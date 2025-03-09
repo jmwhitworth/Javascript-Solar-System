@@ -30,3 +30,25 @@ export function debug(id: string, content: string = "")
     existingDiv.innerHTML = id + ": " + content;
     return true;
 }
+
+
+
+/**
+ * Asynchronously loads JSON data from the specified URL.
+ *
+ * @param url - The URL to fetch the JSON data from.
+ * @returns - A promise that resolves to the parsed JSON data, or null if an error occurs.
+ * @throws - If the network response is not ok.
+ */
+export async function loadJSONData(url:string) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error: any) {
+        console.error('Error loading JSON data:', error.message);
+        return null;
+    }
+}

@@ -1,7 +1,8 @@
 import { Application } from "pixi.js";
 import { Viewport } from "pixi-viewport";
+
 import { SolarSystem } from "./classes/SolarSystem";
-import { debug } from "./helpers";
+import { debug, loadJSONData } from "./helpers";
 
 (async () => {
   const app = new Application();
@@ -19,11 +20,8 @@ import { debug } from "./helpers";
   app.stage.addChild(viewport);
   viewport.drag().pinch().wheel().decelerate();
 
-  // Create Sun Graphic
-  const milky_way = new SolarSystem("Milky Way");
-
-  milky_way.generate_objects();
-
+  let bodies = await loadJSONData('/bodies.json');
+  const milky_way = new SolarSystem(bodies['milkyway']);
   milky_way.objects.forEach((object) => {
     viewport.addChild(object);
   });

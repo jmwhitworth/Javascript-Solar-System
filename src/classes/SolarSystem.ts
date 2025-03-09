@@ -1,23 +1,43 @@
 import { StellarObject } from './StellarObject';
 
+
+interface BodyJSON {
+    name: string;
+    type: string;
+    size: number;
+    distance: number;
+    velocity: number;
+    colour: string;
+    satellites: BodyJSON[];
+}
+
 export class SolarSystem {
     name: string;
     objects: StellarObject[];
 
-    constructor(name: string) {
-        this.name = name;
+    constructor(bodies: BodyJSON[]) {
+        this.name = "";
         this.objects = [];
+
+        this.generate_objects(bodies);
     }
 
-    generate_objects() {
-        const sun = new StellarObject('sun', 'star', 200, 0, 0, '#fce570');
-        this.objects.push(sun);
-
-        const earth = new StellarObject('earth', 'planet', 50, 1000, 0.001, '#1e90ff', sun);
-        this.objects.push(earth);
-
-        const moon = new StellarObject('moon', 'moon', 10, 100, 0.02, '#d3d3d3', earth);
-        this.objects.push(moon);
+    generate_objects(bodies: BodyJSON[], primary?: StellarObject) {
+        bodies.forEach((body) => {
+            const object = new StellarObject(
+                body.name,
+                body.type,
+                body.size * 0.0001,
+                body.distance * 0.000001,
+                body.velocity * 0.00000001,
+                body.colour,
+                primary
+            );
+            this.objects.push(object);
+            if (body.satellites) {
+                this.generate_objects(body.satellites, object);
+            }
+        });
     }
 
     tick() {
