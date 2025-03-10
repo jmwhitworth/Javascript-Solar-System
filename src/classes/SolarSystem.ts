@@ -11,9 +11,37 @@ interface BodyJSON {
     satellites: BodyJSON[];
 }
 
+interface Scales {
+    [key: string]: Scale;
+}
+
+interface Scale {
+    size: number;
+    distance: number;
+    velocity: number;
+}
+
+
 export class SolarSystem {
     name: string;
     objects: StellarObject[];
+    scales: Scales = {
+        "star": {
+            size: 0.0000003,
+            distance: 0,
+            velocity: 0,
+        },
+        "planet": {
+            size: 0.000002,
+            distance: 0.00000001,
+            velocity: 0.00000001,
+        },
+        "moon": {
+            size: 0.000001,
+            distance: 0.0000001,
+            velocity: 0.000001,
+        }
+    };
 
     constructor(bodies: BodyJSON[]) {
         this.name = "";
@@ -27,9 +55,9 @@ export class SolarSystem {
             const object = new StellarObject(
                 body.name,
                 body.type,
-                body.size * 0.0001,
-                body.distance * 0.000001,
-                body.velocity * 0.00000001,
+                body.size * this.scales[body.type].size,
+                body.distance * this.scales[body.type].distance,
+                body.velocity * this.scales[body.type].velocity,
                 body.colour,
                 primary
             );

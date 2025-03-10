@@ -12,12 +12,11 @@ import { debug, loadJSONData } from "./helpers";
   const viewport = new Viewport({
     screenWidth: window.innerWidth,
     screenHeight: window.innerHeight,
-    worldWidth: 1000,
-    worldHeight: 1000,
     events: app.renderer.events,
   });
 
   app.stage.addChild(viewport);
+  viewport.moveCenter(0, 0);
   viewport.drag().pinch().wheel().decelerate();
 
   const bodies = await loadJSONData('/bodies.json');
@@ -34,9 +33,9 @@ import { debug, loadJSONData } from "./helpers";
       milky_way.tick();
 
       debug("Frame", String(elapsed));
-      debug("Delta", String(time.deltaMS));
-      debug("ViewportPos", `x: ${viewport.x}, y: ${viewport.y}`);
-      debug("ViewportScale", `scale: ${viewport.scale.x}, ${viewport.scale.y}`);
+      debug("Delta", String(Math.round(time.deltaMS)));
+      debug("ViewportPos", `x: ${Math.round(viewport.x)}, y: ${Math.round(viewport.y)}`);
+      debug("ViewportScale", `scale: ${Math.round(viewport.scale.x)}, ${Math.round(viewport.scale.y)}`);
   });
 
 })();

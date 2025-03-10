@@ -1,6 +1,9 @@
 body {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     color: rgba(255, 255, 255, 0.87);
     background-color: #000000;
 }
@@ -12,4 +15,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#debug, #controls {
+    position: absolute;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+
+    background-color: darkblue;
+    color: white;
+
+    font-size: 12px;
+}
+
+#controls {
+    bottom: 0;
 }

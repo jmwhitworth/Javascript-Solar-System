@@ -25,7 +25,7 @@ export class StellarObject extends Graphics {
 
         this.x = 0;
         this.y = 0;
-        this.orbitalAngle = 0;
+        this.orbitalAngle = Math.random() * Math.PI * 2;
 
         if (primary) {
             this.primary = primary;
